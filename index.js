@@ -18,7 +18,19 @@ app.use(express.json());//requestam ir responsam
 // PUT/PATCH      /products/update/:id - route -> redaguoja produkta
 // DELETE      /products/delete/:id -> istrina produkta
 
-app.get('/products', async (req, res)); //req - request, res - response
+ //req - request, res - response
+ // localhost:3000/products
+ // { message: 'Sekmingai pasiektas produktu puslapis'} status kodas 200
+app.get('/products', async (req, res) => {
+    //neapibrezta klaida 400 koda, jeigu nepavyksta prisijungti prie duombazes 500
+    try {
+        res.status(200).json({ message: 'Sekmingai pasiektas produktu puslapis'});
+    }
+    catch (err){
+        res.status(400).json({error: 'error'});        
+    }
+});
+
 
 
 const PORT = 3000;
