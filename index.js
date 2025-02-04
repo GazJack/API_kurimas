@@ -1,39 +1,101 @@
-console.log('test');
+// console.log('test');
 
 //express - ekspreso serveris
-//pg - integracia su PSql duombaze
-//dotenv - prisijungimo duomenu pasidejimui duombazėje
+//pg - integracija su PSql duombaze
+//dotenv - prisijungimo duomenu pasidejimui duombazei
 
-const express = require('express'); // require pasiima is modules express
+const express = require('express'); //require pasiima is modules express
 const app = express();
 
-//prisijungia prei duombazes
+//prisijungima prie duombazes 
+const pool = require('./database');
 
-app.use(express.json());//requestam ir responsam
+app.use(express.json());//requestam ir responsem
 
-//apsirasyti ROUTES - kelias
-// GET      /products - route -> grazina visus produktus
-// GET      /products - route|kelias -> grazina 1 produkta
-// POST      /products/create -route|kelias -> sukuria viena aprodukta
-// PUT/PATCH      /products/update/:id - route -> redaguoja produkta
-// DELETE      /products/delete/:id -> istrina produkta
+//Apsirasyti ROUTES - kelias
+//  GET     /products - route mums grazins visus produktus
+//  GET     /products/:id - route mums viena 1 produkta
+//  POST         /products/create - route sukurs produkta
+//  PUT/PATCH     /products/update/:id - route redaguos produkta
+//  DELETE     /products/delete/:id  - istrins produkta
 
- //req - request, res - response
- // localhost:3000/products
- // { message: 'Sekmingai pasiektas produktu puslapis'} status kodas 200
+//req - request
+//res - response
+//localhost:3000/products
+//{ message: 'Sėkmingai pasiekiamas produktų puslapis'} status kodas 200
 app.get('/products', async (req, res) => {
     //neapibrezta klaida 400 koda, jeigu nepavyksta prisijungti prie duombazes 500
     try {
-        res.status(200).json({ message: 'Sekmingai pasiektas produktu puslapis'});
+        res.status(200).json({ message: 'Sėkmingai pasiekiamas produktų puslapis'});
     }
-    catch (err){
-        res.status(400).json({error: 'error'});        
+    catch (err) {
+        res.status(400).json({error: 'error'});
     }
+    
+});
+//  GET     /users - route mums grazins visus users
+app.get('/users', async (req, res) => {
+    //neapibrezta klaida 400 koda, jeigu nepavyksta prisijungti prie duombazes 500
+    //select * from users
+    
+    try {
+        const results = await pool.query("select * from users");    
+        res.status(200).json(results.rows);
+        // res.status(200).json({ message: 'Sėkmingai pasiekiamas produktų puslapis'});
+    }
+    catch (err) {
+        res.status(400).json({error: 'error'});
+    }
+    
 });
 
+//  GET     /users/:id - route mums viena 1 users
+app.get('/users/:id', async (req, res) => {
+    //neapibrezta klaida 400 koda, jeigu nepavyksta prisijungti prie duombazes 500
+    //select * from users
+    
+    try {
+        const id = req.params.id;
+        const results = await pool.query(`select * from users where id=$1`,[id]);    
+        // const results = await pool.query(`select * from users where id=${id}`);    
+        res.status(200).json(results.rows);
+        // res.status(200).json({ message: 'Sėkmingai pasiekiamas produktų puslapis'});
+    }
+    catch (err) {
+        res.status(400).json({error: 'error'});
+    }
+    
+});
+//  POST         /users - route sukurs users
+app.post('/users', async (req, res) => {
+    try {
+        // insert into users (id,username,"password")  values (1000, 'idetasPerInsert','idetasPerInser')
+        
+        const {id, username, password} = req.body;
+
+        const results = await pool.query(`insert into users (id,username,"password")  values (${id}, '${username}','${password}') returning *`);    
+        // const results = await pool.query(`select * from users where id=${id}`);    
+        res.status(201).json(results.rows[0]);
+        // res.status(200).json({ message: 'Sėkmingai pasiekiamas produktų puslapis'});
+    }
+    catch (err) {
+        res.status(400).json({error: 'error'});
+    }
+    
+});
+//  PUT/PATCH     /users/:id - route redaguos users
+
+//  DELETE     /users/:id  - istrins users
+
+
+
+// /users reikia gauti visų vartotojų sąrašą iš lentelės users
+// 1. API turi prisijungti prie DB x
+// 2. Kelia /users x
+// 3. Per postman atvaizduoti users JSON formatu
 
 
 const PORT = 3000;
 app.listen(PORT, () => {
-    console.log(`Sereris runnina ${PORT}`)
+    console.log(`Server is running on ${PORT}`)
 });
