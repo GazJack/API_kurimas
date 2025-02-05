@@ -1,3 +1,5 @@
+// dirbam su: postgresql, dbeaver, postman, vs code, cypress
+
 // console.log('test');
 
 //express - ekspreso serveris
