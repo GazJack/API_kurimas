@@ -35,6 +35,9 @@ app.get('/products', async (req, res) => {
     }
     
 });
+
+
+
 //  GET     /users - route mums grazins visus users
 app.get('/users', async (req, res) => {
     //neapibrezta klaida 400 koda, jeigu nepavyksta prisijungti prie duombazes 500
@@ -47,9 +50,9 @@ app.get('/users', async (req, res) => {
     }
     catch (err) {
         res.status(400).json({error: 'error'});
-    }
-    
-});
+    }});
+
+
 
 //  GET     /users/:id - route mums viena 1 users
 app.get('/users/:id', async (req, res) => {
@@ -65,14 +68,14 @@ app.get('/users/:id', async (req, res) => {
     }
     catch (err) {
         res.status(400).json({error: 'error'});
-    }
-    
-});
+    }});
+
+
+
 //  POST         /users - route sukurs users
 app.post('/users', async (req, res) => {
     try {
         // insert into users (id,username,"password")  values (1000, 'idetasPerInsert','idetasPerInser')
-        
         const {id, username, password} = req.body;
 
         const results = await pool.query(`insert into users (id,username,"password")  values (${id}, '${username}','${password}') returning *`);    
@@ -82,17 +85,19 @@ app.post('/users', async (req, res) => {
     }
     catch (err) {
         res.status(400).json({error: 'error'});
-    }
-    
-});
+    }});
+
+
+
 //  PUT/PATCH     /users/:id - route redaguos users
 app.put('/users/:id', async (req, res) => {
     try {
         // insert into users (id,username,"password")  values (1000, 'idetasPerInsert','idetasPerInser')
-        
-
         const id = req.params.id;
         const {username, password} = req.body;
+        //arba galim rašyti (tada į postman body nereikės įrašyti kuriamo id, nes jis jį pasiims pats iš to kokį nurodysim prie postman nuorodos):
+        //const id = req.params.id;
+        //const {username, passwords} = req.body;
 
         const results = await pool.query(`update users 
             set username = '${username}', 
@@ -105,15 +110,13 @@ app.put('/users/:id', async (req, res) => {
     }
     catch (err) {
         res.status(400).json({error: 'error'});
-    }
-    
-});
+    }});
+
+
 //  DELETE     /users/:id  - istrins users
 app.delete('/users/:id', async (req, res) => {
     try {
         // insert into users (id,username,"password")  values (1000, 'idetasPerInsert','idetasPerInser')
-        
-
         const id = req.params.id;
 
         const results = await pool.query(`delete from users where id = ${id}`);    
@@ -123,9 +126,7 @@ app.delete('/users/:id', async (req, res) => {
     }
     catch (err) {
         res.status(400).json({error: 'error'});
-    }
-    
-});
+    }});
 
 
 // /users reikia gauti visų vartotojų sąrašą iš lentelės users
@@ -139,3 +140,4 @@ app.listen(PORT, () => {
     console.log(`Server is running on ${PORT}`)
 });
 
+// dirbam su: postgresql, dbeaver, postman, vs code, cypress

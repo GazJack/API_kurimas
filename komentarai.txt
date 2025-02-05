@@ -28,3 +28,5 @@ Stack - technologijos,kurias naudojam
     1.2 Serveris (Node.js + express.js) 
     1.3 Bazinės Javascript žinios
 //Node.js + express.js + Postgresql + /////// React.js(dizainui)
+
+Dirbam su: Postgresql, DBeaver, Postman, VS Code, Cypress
