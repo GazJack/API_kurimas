@@ -58,7 +58,7 @@ app.get('/users/:id', async (req, res) => {
         const id = req.params.id;
         const results = await pool.query(`select * from users where id=$1`,[id]);    
         // const results = await pool.query(`select * from users where id=${id}`);    
-        res.status(200).json(results.rows);
+        res.status(200).json(results.rows[0]);
         // res.status(200).json({ message: 'Sėkmingai pasiekiamas produktų puslapis'});
     }
     catch (err) {
@@ -84,9 +84,46 @@ app.post('/users', async (req, res) => {
     
 });
 //  PUT/PATCH     /users/:id - route redaguos users
+app.put('/users/:id', async (req, res) => {
+    try {
+        // insert into users (id,username,"password")  values (1000, 'idetasPerInsert','idetasPerInser')
+        
 
+        const id = req.params.id;
+        const {username, password} = req.body;
+
+        const results = await pool.query(`update users 
+            set username = '${username}', 
+            "password" = '${password}' 
+            where id = ${id} 
+            returning *`);    
+        // const results = await pool.query(`select * from users where id=${id}`);    
+        res.status(200).json(results.rows[0]);
+        // res.status(200).json({ message: 'Sėkmingai pasiekiamas produktų puslapis'});
+    }
+    catch (err) {
+        res.status(400).json({error: 'error'});
+    }
+    
+});
 //  DELETE     /users/:id  - istrins users
+app.delete('/users/:id', async (req, res) => {
+    try {
+        // insert into users (id,username,"password")  values (1000, 'idetasPerInsert','idetasPerInser')
+        
 
+        const id = req.params.id;
+
+        const results = await pool.query(`delete from users where id = ${id}`);    
+        // const results = await pool.query(`select * from users where id=${id}`);    
+        res.status(200).json({message: 'Elementas sėkmingai ištrintas'});
+        // res.status(200).json({ message: 'Sėkmingai pasiekiamas produktų puslapis'});
+    }
+    catch (err) {
+        res.status(400).json({error: 'error'});
+    }
+    
+});
 
 
 // /users reikia gauti visų vartotojų sąrašą iš lentelės users
@@ -99,3 +136,4 @@ const PORT = 3000;
 app.listen(PORT, () => {
     console.log(`Server is running on ${PORT}`)
 });
+
