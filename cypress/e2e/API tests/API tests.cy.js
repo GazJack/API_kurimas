@@ -26,3 +26,5 @@ it('Tikrina, ar produktas buvo sukurtas, kai kreipiamasį į POST /products', ()
 //  Patikrina, ar atsakyme esantys duomenys atitinka tai, ką nusiuntei.
 
 // npx cypress run
+
+
