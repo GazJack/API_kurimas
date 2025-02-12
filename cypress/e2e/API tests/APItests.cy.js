@@ -104,10 +104,11 @@ describe('CRUD_API', () => {
     // MANO:
 // Papildomai: parašyti CYPRESS testą, kuris patikrina, ar produktas buvo sukurtas, kai kreipiamasį į POST /products
 it('Tikrina, ar produktas buvo sukurtas, kai kreipiamasį į POST /products', () => {
-    cy.request('POST', 'http://localhost:3000/products', {     "title": "Water", "description": "Sparkling with lemon", "price": 0.99}).then((response) => {
+    cy.request('POST', 'http://localhost:3000/products', {     title: "Water", description: "Sparkling with lemon", price: 0.99}).then((response) => {
         expect(response.body).to.have.property("title", "Water");
         expect(response.body).to.have.property("description", "Sparkling with lemon");
         expect(response.body).to.have.property("price", 0.99);
+        expect(response.body).to.have.property('id');
     })
 });
 
@@ -116,15 +117,18 @@ it('Produktas atnaujinamas kai kreipiamasi į PUT/products/7', () => {
     cy.request('PUT', 'http://localhost:3000/products/7', {"title": "Table", "description": "White", "price": 899.99}).then((response) => {
         expect(response.body).to.have.property('title', 'Table')
         expect(response.body).to.have.property('description', 'White')
-        expect(response.body).to.have.property('price', 899.99)
+        expect(response.body).to.have.property('price', 899.99);
+        expect(response.body).to.have.property('id');
     })
 });
-
+// visuose rezultatuose turi matytis 200 ir zinute, kad sekmingai/nesekmingai pavyko. 
+//man zinute ir taip rodo todel as neirasiau i koda papildomai, bet darbe reikes irasyti. o jei kodo atsakymas raudonuoja - programuotojas tures taisyti kalida, ne as.
 
 // delete
-it('Produktas ištrinamas kai kreipiamasi į DELETE/products/18', () => {
-    cy.request('DELETE', 'http://localhost:3000/products/18').then((response) => {
+it('Produktas ištrinamas kai kreipiamasi į DELETE/products/49', () => {
+    cy.request('DELETE', 'http://localhost:3000/products/49').then((response) => {
         expect(response.status).to.eq(200);
+        cy.log(response.body);
     });
   });
 });
