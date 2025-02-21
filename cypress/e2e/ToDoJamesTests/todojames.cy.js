@@ -1,49 +1,10 @@
-// atidaryti svetainę: cy.visit();
-
-it('Sukuriamas naujas to do', () => {
-    cy.visit('https://todolist.james.am/#/');
-
-    // 1. Priversti robota(cypress) suvesti uzuodties pavadinima
-    //. 1.1. turim patikrinti ar input egzistuoja
-
-
-    cy.get('input.new-todo').type('1 uzduotis. tekstas isiveda automatiskai kai ji irasom i vs code{enter}');
-
-    // 2. Patikrinti ar pirma uzduotis atsidure uzduociu sarase
-
-});
-
-
-
-    //1.2 turim ivesti konkretu teksta i input
-    
-    
-    //document.querySelector("p");
-    //document.querySelector("#id");
-    //document.querySelector(".class");
-
-    // document.querySelector("p.header")
-    // document.querySelector("h1#header")
-    
-    //document.getElementById('id')
-    //document.getElementByClass('class') !!!!!!!!!!
-    // 1 uzduotis arba bus null
-    cy.contains('ul.todo-list li', '1 uzduotis').should('be.visible')
-    // cy.get('ul.todo-list li')
-    //ar 1 uzduotis li elementas yra matomas
-    // cy.get('ul.todo-list li')
-    //cypress bando ieskoti elemento li, kurio turinys yra 1 uzduotis
-    
-
-    // cy.get('ul.todo-list li').invoke('text').should('c')
-    // Patikrinti ar pirma uzduotis atsidure uzduociu sarase
-
+/// <reference types="cypress" />
 
 it('Delete new to do', () => {
     cy.visit('https://todolist.james.am/#/');
     cy.get('input.new-todo').type('1 uzduotis{enter}');
     cy.get('input.new-todo').type('trinama uzduotis{enter}');
-    
+
     // sudetingesnis variantas
     cy.contains('ul.todo-list li', 'trinama uzduotis').find('button.destroy').invoke('show');
     cy.contains('ul.todo-list li', 'trinama uzduotis').find('button.destroy').click();
@@ -55,35 +16,49 @@ it('Delete new to do', () => {
     //mouseup - atleidus pelytes klavisa
     //...
 
-    //ne tik paslepia elementa bet ir istrina jo koda
-
-    // cy.contains('ul.todo-list li', 'trinama uzduotis').should('not.be.visible')
     cy.contains('ul.todo-list li', 'trinama uzduotis').should('not.exist');
-
-    //sita veiksma atliksim po pertraukos
-    
-
-
-    //susikurti uzduoti x
-    //sukurta uzduoti istrinti
-
-})
+});
 
 it('To do item edit', () => {
     cy.visit('https://todolist.james.am/#/');
     cy.get('input.new-todo').type('1 uzduotis{enter}');
     cy.get('input.new-todo').type('2 uzduotis{enter}');
     cy.get('input.new-todo').type('3 uzduotis{enter}');
+});
 
-    // 2 uzduoti redaguosim
-    cy.contains('ul.todo-list li', '2 uzduotis').dblclick();
+describe('TodoJamesTestaiKuriemsNereikiaBeforeEachSesijos', () => {
+    beforeEach(() => {
+        cy.visit('https://todolist.james.am/#/');
+    });
 
-    //uzduoties laukeli isvalysim ir tada pridesim teksta "redaguota uzduotis"
-    cy.contains('ul.todo-list li', '2 uzduotis').find('input.edit').clear().type('redaguota uzduotis{enter}')
+    it('Create new to do', () => {
+        cy.get('input.new-todo').type('1 uzduotis{enter}');
+        cy.contains('ul.todo-list li', '1 uzduotis').should('be.visible')
+    });
 
+    it('Ar <header> elementas atvaizduojamas', () => {
+        cy.get('header').should('exist');
+        cy.get('header').should('be.visible');
+    });
 
-    cy.contains('ul.todo-list li', 'redaguota uzduotis').should('be.visible');
+    it('Ar headeryje(h1 tage) atvaizduojamas tekstas "To Do List"', () => {
+        cy.get('header h1').should('exist');
+        cy.get('header h1').should('be.visible');
 
-    // cy.get('.edit').clear();
+        cy.contains('header h1', 'To Do List').should('be.visible');
+        cy.get('header h1').should('have.text', 'To Do List');
+    });
 
-})
+    it("Ar atvaizduojamas 'Double-click to edit a todo' tekstas", () => {
+        cy.contains('footer.info p', 'Double-click to edit a toodo').should('exist');
+        cy.contains('footer.info p', 'Double-click to edit a toodo').should('be.visible');
+    });
+
+    it("Ar input laukelyje atvaizduojamas tekstas 'What need's to be done?'", () => {
+        cy.get('input.new-todo[placeholder="What need\'s to be done?"]').should('exist');
+        cy.get('input.new-todo[placeholder="What need\'s to be done?"]').should('be.visible');
+        cy.get('input.new-todo')
+            .should('have.attr', 'placeholder', "What need's to be done?")
+            .should('be.visible');
+    });
+});
