@@ -20,5 +20,5 @@ pool.on('error', (err,client) => {
     process.exit(-1);    
 });
 
-//mes visa faila galim anudoti kaip moduli
+//mes visa faila galim naudoti kaip moduli
 module.exports = pool;
