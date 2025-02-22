@@ -1,3 +1,5 @@
+// 27ps.Mo. before each
+
 /// <reference types="cypress" />
 
 it('Delete new to do', () => {
@@ -62,3 +64,5 @@ describe('TodoJamesTestaiKuriemsNereikiaBeforeEachSesijos', () => {
             .should('be.visible');
     });
 });
+
+// 27ps.Mo. before each
